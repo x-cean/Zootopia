@@ -1,10 +1,6 @@
 from data_fetcher import fetch_data
 
 
-URL = f"https://api.api-ninjas.com/v1/animals?name="
-API_KEY = "kkImrQgeUXU0frtzE8M79A==bN5xULXLZCNPD07f"
-
-
 def get_animal_name():
     """
     get animal name from user
