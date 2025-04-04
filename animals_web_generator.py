@@ -1,4 +1,4 @@
-import requests
+from data_fetcher import fetch_data
 
 
 URL = f"https://api.api-ninjas.com/v1/animals?name="
@@ -15,19 +15,6 @@ def get_animal_name():
             print("Animal name cannot be empty.")
         else:
             return animal_name.strip().lower()
-
-
-def get_animal_data(name):
-    """
-    get animal data from api
-    """
-    api_url = URL + name
-    response = requests.get(api_url, headers={"X-Api-Key": API_KEY})
-    if response.status_code == requests.codes.ok:
-        return response.json()
-    else:
-        print("Error:", response.status_code, response.text)
-        return None
 
 
 def get_and_display_skin_types_from_data(animals_list):
@@ -136,7 +123,7 @@ def main():
     get animal info from a json file, select skin type, and display animal data in a html file
     """
     animal_name = get_animal_name()
-    animals_data = get_animal_data(animal_name)
+    animals_data = fetch_data(animal_name)
     if animals_data is None:
         animals_text = "<h2><i>Error retrieving animal data! Please try again.</i></h2>"
     elif not animals_data:
