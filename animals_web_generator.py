@@ -27,7 +27,7 @@ def get_animal_data(name):
         return response.json()
     else:
         print("Error:", response.status_code, response.text)
-        return []
+        return None
 
 
 def get_and_display_skin_types_from_data(animals_list):
@@ -137,13 +137,18 @@ def main():
     """
     animal_name = get_animal_name()
     animals_data = get_animal_data(animal_name)
-    skin_types = get_and_display_skin_types_from_data(animals_data)
-    skin_type = get_skin_type_from_user(skin_types)
-    if skin_type == "0":
-        animals_text = generate_animal_data_string(animals_data)
+    if animals_data is None:
+        animals_text = "<h2><i>Error retrieving animal data! Please try again.</i></h2>"
+    elif not animals_data:
+        animals_text = f"<h2><i>The animal <strong style='color: firebrick'>'{animal_name}'</strong> doesn't exist.</i></h2>"
     else:
-        filtered_animals_data = filter_animal_skin_type(skin_type, animals_data)
-        animals_text = generate_animal_data_string(filtered_animals_data)
+        skin_types = get_and_display_skin_types_from_data(animals_data)
+        skin_type = get_skin_type_from_user(skin_types)
+        if skin_type == "0":
+            animals_text = generate_animal_data_string(animals_data)
+        else:
+            filtered_animals_data = filter_animal_skin_type(skin_type, animals_data)
+            animals_text = generate_animal_data_string(filtered_animals_data)
     update_animal_html("__REPLACE_ANIMALS_INFO__", animals_text)
     print("Website was successfully generated to the file animals.html.")
 
