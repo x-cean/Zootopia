@@ -1,8 +1,20 @@
 import requests
 
 
-ANIMAL_NAME = "fox"
 URL = f"https://api.api-ninjas.com/v1/animals?name="
+API_KEY = "kkImrQgeUXU0frtzE8M79A==bN5xULXLZCNPD07f"
+
+
+def get_animal_name():
+    """
+    get animal name from user
+    """
+    while True:
+        animal_name = input("Enter a name of an animal: ")
+        if animal_name.strip() == "":
+            print("Animal name cannot be empty.")
+        else:
+            return animal_name.strip().lower()
 
 
 def get_animal_data(name):
@@ -10,7 +22,7 @@ def get_animal_data(name):
     get animal data from api
     """
     api_url = URL + name
-    response = requests.get(api_url, headers={'X-Api-Key': 'kkImrQgeUXU0frtzE8M79A==bN5xULXLZCNPD07f'})
+    response = requests.get(api_url, headers={"X-Api-Key": API_KEY})
     if response.status_code == requests.codes.ok:
         return response.json()
     else:
@@ -123,7 +135,8 @@ def main():
     """
     get animal info from a json file, select skin type, and display animal data in a html file
     """
-    animals_data = get_animal_data(ANIMAL_NAME)
+    animal_name = get_animal_name()
+    animals_data = get_animal_data(animal_name)
     skin_types = get_and_display_skin_types_from_data(animals_data)
     skin_type = get_skin_type_from_user(skin_types)
     if skin_type == "0":
@@ -132,6 +145,7 @@ def main():
         filtered_animals_data = filter_animal_skin_type(skin_type, animals_data)
         animals_text = generate_animal_data_string(filtered_animals_data)
     update_animal_html("__REPLACE_ANIMALS_INFO__", animals_text)
+    print("Website was successfully generated to the file animals.html.")
 
 
 if __name__ == "__main__":
